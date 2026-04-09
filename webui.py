@@ -12,7 +12,7 @@ WebUI 启动脚本
 
 Usage:
   python webui.py
-  WEBUI_HOST=0.0.0.0 WEBUI_PORT=8000 python webui.py
+  API_HOST=0.0.0.0 API_PORT=8000 python webui.py
 """
 
 from __future__ import annotations
@@ -27,9 +27,9 @@ def main() -> int:
     """
     启动 Web 服务
     """
-    # 兼容旧版环境变量名
-    host = os.getenv("WEBUI_HOST", os.getenv("API_HOST", "127.0.0.1"))
-    port = int(os.getenv("WEBUI_PORT", os.getenv("API_PORT", "8000")))
+    # API_HOST/API_PORT 为正式变量名，WEBUI_* 为旧版兼容
+    host = os.getenv("API_HOST", os.getenv("WEBUI_HOST", "127.0.0.1"))
+    port = int(os.getenv("API_PORT", os.getenv("WEBUI_PORT", "8000")))
 
     print(f"正在启动 Web 服务: http://{host}:{port}")
     print(f"API 文档: http://{host}:{port}/docs")

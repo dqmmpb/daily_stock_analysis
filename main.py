@@ -767,12 +767,12 @@ def main() -> int:
     # === 启动 Web 服务 (如果启用) ===
     start_serve = (args.serve or args.serve_only) and os.getenv("GITHUB_ACTIONS") != "true"
 
-    # 兼容旧版 WEBUI_HOST/WEBUI_PORT：如果用户未通过 --host/--port 指定，则使用旧变量
+    # 兼容旧版 WEBUI_HOST/WEBUI_PORT：如果用户未通过 --host/--port 指定，则使用环境变量
     if start_serve:
-        if args.host == '0.0.0.0' and os.getenv('WEBUI_HOST'):
-            args.host = os.getenv('WEBUI_HOST')
-        if args.port == 8000 and os.getenv('WEBUI_PORT'):
-            args.port = int(os.getenv('WEBUI_PORT'))
+        if args.host == '0.0.0.0' and os.getenv('API_HOST', os.getenv('WEBUI_HOST')):
+            args.host = os.getenv('API_HOST', os.getenv('WEBUI_HOST'))
+        if args.port == 8000 and os.getenv('API_PORT', os.getenv('WEBUI_PORT')):
+            args.port = int(os.getenv('API_PORT', os.getenv('WEBUI_PORT')))
 
     bot_clients_started = False
     if start_serve:

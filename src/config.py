@@ -1327,9 +1327,9 @@ class Config:
                 os.getenv('MARKET_REVIEW_REGION', 'cn')
             ),
             trading_day_check_enabled=os.getenv('TRADING_DAY_CHECK_ENABLED', 'true').lower() != 'false',
-            webui_enabled=os.getenv('WEBUI_ENABLED', 'false').lower() == 'true',
-            webui_host=os.getenv('WEBUI_HOST', '127.0.0.1'),
-            webui_port=parse_env_int(os.getenv('WEBUI_PORT'), 8000, field_name='WEBUI_PORT', minimum=1, maximum=65535),
+            webui_enabled=os.getenv('API_ENABLED', os.getenv('WEBUI_ENABLED', 'false')).lower() == 'true',
+            webui_host=os.getenv('API_HOST', os.getenv('WEBUI_HOST', '127.0.0.1')),
+            webui_port=parse_env_int(os.getenv('API_PORT', os.getenv('WEBUI_PORT')), 8000, field_name='API_PORT', minimum=1, maximum=65535),
             # 机器人配置
             bot_enabled=os.getenv('BOT_ENABLED', 'true').lower() == 'true',
             bot_command_prefix=os.getenv('BOT_COMMAND_PREFIX', '/'),

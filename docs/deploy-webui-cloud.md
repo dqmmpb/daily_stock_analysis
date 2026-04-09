@@ -25,18 +25,18 @@
 用编辑器打开 `.env`（在项目根目录，即包含 `main.py` 的目录），找到这一行：
 
 ```env
-WEBUI_HOST=127.0.0.1
+API_HOST=127.0.0.1
 ```
 
 把 `127.0.0.1` 改成 `0.0.0.0`：
 
 ```env
-WEBUI_HOST=0.0.0.0
+API_HOST=0.0.0.0
 ```
 
 > `127.0.0.1` 表示只有本机能访问，`0.0.0.0` 表示允许任何来源访问。云服务器必须改成 `0.0.0.0` 才能从外网打开界面。
 
-> **注意**：`.env` 里的 `WEBUI_HOST` 优先级高于命令行参数。所以即使你在命令里加了 `--host 0.0.0.0`，如果 `.env` 里还是 `127.0.0.1`，外网照样访问不了。请务必先改 `.env`。
+> **注意**：`.env` 里的 `API_HOST` 优先级高于命令行参数。所以即使你在命令里加了 `--host 0.0.0.0`，如果 `.env` 里还是 `127.0.0.1`，外网照样访问不了。请务必先改 `.env`。
 
 ### 第二步：启动服务
 
@@ -69,7 +69,7 @@ nohup python main.py --webui-only > /dev/null 2>&1 &
 默认端口是 8000。如果想改用其他端口，在 `.env` 里设置：
 
 ```env
-WEBUI_PORT=8888
+API_PORT=8888
 ```
 
 然后重启服务。
@@ -80,7 +80,7 @@ WEBUI_PORT=8888
 
 ### 第一步：确认已有 .env 配置
 
-项目的 `docker/docker-compose.yml` 在容器内部已经自动设置了 `WEBUI_HOST=0.0.0.0`，你不需要在 `.env` 里再改监听地址，Docker 会自动处理。
+项目的 `docker/docker-compose.yml` 在容器内部已经自动设置了 `API_HOST=0.0.0.0`，你不需要在 `.env` 里再改监听地址，Docker 会自动处理。
 
 ### 第二步：启动服务
 
@@ -194,11 +194,11 @@ sudo firewall-cmd --permanent --add-port=8000/tcp
 sudo firewall-cmd --reload
 ```
 
-### 3. 直接部署时 .env 里的 WEBUI_HOST 没改
+### 3. 直接部署时 .env 里的 API_HOST 没改
 
-这是第二常见原因。`.env` 里默认是 `WEBUI_HOST=127.0.0.1`，这样服务只监听本机，外网根本连不上。
+这是第二常见原因。`.env` 里默认是 `API_HOST=127.0.0.1`，这样服务只监听本机，外网根本连不上。
 
-改法：打开 `.env`，把 `WEBUI_HOST=127.0.0.1` 改成 `WEBUI_HOST=0.0.0.0`，然后重启服务。
+改法：打开 `.env`，把 `API_HOST=127.0.0.1` 改成 `API_HOST=0.0.0.0`，然后重启服务。
 
 > Docker 方式不需要改这个，可以跳过。
 
@@ -206,7 +206,7 @@ sudo firewall-cmd --reload
 
 检查访问地址里的端口是否和 `.env` / 启动命令里设置的端口一致。
 
-- 直接部署：默认 8000，可通过 `WEBUI_PORT=xxxx` 修改
+- 直接部署：默认 8000，可通过 `API_PORT=xxxx` 修改
 - Docker：默认 8000，可通过 `API_PORT=xxxx` 修改
 
 ### 5. 页面能打开，但 UI 元素异常变大 / 布局错乱

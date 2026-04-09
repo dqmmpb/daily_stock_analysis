@@ -341,7 +341,7 @@ class ConfigEnvCompatibilityTestCase(unittest.TestCase):
             "AGENT_ORCHESTRATOR_TIMEOUT_S": "oops",
             "NEWS_MAX_AGE_DAYS": "bad",
             "MAX_WORKERS": "",
-            "WEBUI_PORT": "invalid",
+            "API_PORT": "invalid",
         }
 
         with patch.dict(os.environ, env, clear=True):
@@ -351,6 +351,41 @@ class ConfigEnvCompatibilityTestCase(unittest.TestCase):
         self.assertEqual(config.news_max_age_days, 3)
         self.assertEqual(config.max_workers, 3)
         self.assertEqual(config.webui_port, 8000)
+
+    @patch("src.config.setup_env")
+    @patch.object(Config, "_parse_litellm_yaml", return_value=[])
+    def test_api_port_overrides_webui_port(
+        self,
+        _mock_parse_yaml,
+        _mock_setup_env,
+    ) -> None:
+        env = {
+            "STOCK_LIST": "600519",
+            "API_PORT": "9000",
+            "WEBUI_PORT": "8888",
+        }
+
+        with patch.dict(os.environ, env, clear=True):
+            config = Config._load_from_env()
+
+        self.assertEqual(config.webui_port, 9000)
+
+    @patch("src.config.setup_env")
+    @patch.object(Config, "_parse_litellm_yaml", return_value=[])
+    def test_webui_port_fallback_when_api_port_unset(
+        self,
+        _mock_parse_yaml,
+        _mock_setup_env,
+    ) -> None:
+        env = {
+            "STOCK_LIST": "600519",
+            "WEBUI_PORT": "8888",
+        }
+
+        with patch.dict(os.environ, env, clear=True):
+            config = Config._load_from_env()
+
+        self.assertEqual(config.webui_port, 8888)
 
     @patch("src.config.setup_env")
     @patch.object(Config, "_parse_litellm_yaml", return_value=[])
